@@ -18,7 +18,7 @@ module.exports = async (config, cli, command) => {
   }
 
   // Load YAML
-  const instanceYaml = await utils.loadInstanceConfig(process.cwd())
+  const instanceYaml = await utils.loadInstanceConfig(process.cwd(), config.target)
 
   // Presentation
   const meta = `Action: "${command}" - Stage: "${instanceYaml.stage}" - App: "${instanceYaml.app}" - Instance: "${instanceYaml.name}"`

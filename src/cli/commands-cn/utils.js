@@ -59,26 +59,32 @@ const getDefaultOrgName = async () => {
  * Reads a serverless instance config file in a given directory path
  * @param {*} directoryPath
  */
-const loadInstanceConfig = async (directoryPath) => {
+const loadInstanceConfig = async (directoryPath, instanceConfName) => {
   directoryPath = path.resolve(directoryPath)
-  const ymlFilePath = path.join(directoryPath, `serverless.yml`)
-  const yamlFilePath = path.join(directoryPath, `serverless.yaml`)
-  const jsonFilePath = path.join(directoryPath, `serverless.json`)
   let filePath
   let isYaml = false
   let instanceFile
 
-  // Check to see if exists and is yaml or json file
-  if (fileExistsSync(ymlFilePath)) {
-    filePath = ymlFilePath
-    isYaml = true
-  }
-  if (fileExistsSync(yamlFilePath)) {
-    filePath = yamlFilePath
-    isYaml = true
-  }
-  if (fileExistsSync(jsonFilePath)) {
-    filePath = jsonFilePath
+  if (instanceConfName) {
+    filePath = path.join(directoryPath, instanceConfName)
+    isYaml = !instanceConfName.endsWith('.json')
+  } else {
+    const ymlFilePath = path.join(directoryPath, `serverless.yml`)
+    const yamlFilePath = path.join(directoryPath, `serverless.yaml`)
+    const jsonFilePath = path.join(directoryPath, `serverless.json`)
+
+    // Check to see if exists and is yaml or json file
+    if (fileExistsSync(ymlFilePath)) {
+      filePath = ymlFilePath
+      isYaml = true
+    }
+    if (fileExistsSync(yamlFilePath)) {
+      filePath = yamlFilePath
+      isYaml = true
+    }
+    if (fileExistsSync(jsonFilePath)) {
+      filePath = jsonFilePath
+    }
   }
 
   if (!filePath) {
